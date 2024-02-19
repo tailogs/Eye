@@ -1,18 +1,4 @@
 # MyLang
 MyLang - мой язык программирования
 
-Пример кода
-```
-set ageInt = inp("Введите возраст: ")
-set ageStr = "Возраст "
-if (ageInt > 50) open
-	prtn("Вы старый") # это комментарий, а в цикле prtn выводит текст и '\n'
-end
-if (ageInt < 50) open
-    prtn("Вы взрослый или молодой")
-end
-prt("Цикл вашего возраста: ") # просто выводит текст без '\n'
-for (set i : ageInt) open
-	prt(set.toStr(i), " ") # тут i приведется к строковой переменной и после ставиться пробел.
-end
-```
+![image](https://github.com/tailogs/MyLang/assets/69743960/41e83ed3-8952-4060-9f3e-ec88dedf219b)

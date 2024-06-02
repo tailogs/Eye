@@ -17,9 +17,14 @@ print(s);
 print(b);
 '''
 
-tokens = my_lexer.my_lex(code)
-parser = MyParser(tokens)
-ast = parser.parse()
+try:
+    tokens = my_lexer.my_lex(code)
+    parser = MyParser(tokens)
+    ast = parser.parse()
 
-interpreter = MyInterpreter(ast)
-interpreter.my_interpret()
+    interpreter = MyInterpreter(ast)
+    interpreter.my_interpret()
+
+except SyntaxError as e:
+    print(f"SyntaxError: {e}")
+

@@ -38,6 +38,10 @@ class MyInterpreter:
                     return left_val / right_val
             elif node[0] == 'num':
                 return node[1]
+            elif node[0] == 'string':
+                return node[1]
+            elif node[0] == 'bool':
+                return node[1]
             elif node[0] == 'ident':
                 return env[node[1]]
             elif node[0] == 'call':

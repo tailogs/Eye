@@ -6,14 +6,15 @@ from my_interpreter import MyInterpreter
 
 code = '''
 let x = 10;
+let s = "Hello, world!";
+let b = true;
 fn add(a, b) {
     return a + b;
 }
-fn sub(a, b) {
-    return a - b;
-}
-let y = add(x, 20) - sub(100, 50);
+let y = add(x, 20);
 print(y);
+print(s);
+print(b);
 '''
 
 tokens = my_lexer.my_lex(code)

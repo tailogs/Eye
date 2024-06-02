@@ -95,6 +95,12 @@ class MyParser:
         if token[0] == 'NUMBER':
             self.pos += 1
             return ('num', token[1])
+        elif token[0] == 'STRING':
+            self.pos += 1
+            return ('string', token[1][1:-1])  # Удаляем кавычки вокруг строки
+        elif token[0] == 'BOOLEAN':
+            self.pos += 1
+            return ('bool', token[1] == 'true')
         elif token[0] == 'IDENT':
             if self.pos + 1 < len(self.tokens) and self.tokens[self.pos + 1][1] == '(':
                 return self.call()
@@ -123,6 +129,6 @@ class MyParser:
     def expect(self, token_type):
         token = self.tokens[self.pos]
         if token[0] != token_type:
-            raise SyntaxError(f"Expected {token_type} but got {token}")
+            raise SyntaxError(f"Expected {token_type} but got {token[0]} ({token[1]}) at line {token[2]}, column {token[3]}")
         self.pos += 1
         return token[1]

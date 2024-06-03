@@ -16,14 +16,14 @@ class MyInterpreter:
             'to_integer': ('builtin', self.to_integer),
             'to_float': ('builtin', self.to_float),
             'to_boolean': ('builtin', self.to_boolean),
-            'substring': ('builtin', self.substring),
+            'sub_string': ('builtin', self.sub_string),
             'string_length': ('builtin', self.string_length),
             'compare_strings': ('builtin', self.compare_strings),
-            'find_substring': ('builtin', self.find_substring),
+            'find_sub_string': ('builtin', self.find_sub_string),
             'get_char_at': ('builtin', self.get_char_at),
-            'to_uppercase': ('builtin', self.to_uppercase),
-            'to_lowercase': ('builtin', self.to_lowercase),
-            'replace_substring': ('builtin', self.replace_substring),
+            'to_upper_case': ('builtin', self.to_upper_case),
+            'to_lower_case': ('builtin', self.to_lower_case),
+            'replace_sub_string': ('builtin', self.replace_sub_string),
             'split_string': ('builtin', self.split_string),
             'delete': ('builtin', self.delete)
         }
@@ -217,7 +217,7 @@ class MyInterpreter:
             return value != 0
         return bool(value)
 
-    def substring(self, string, start, end=None):
+    def sub_string(self, string, start, end=None):
         if end is None:
             return string[start:]
         else:
@@ -234,20 +234,20 @@ class MyInterpreter:
         else:
             return 1
 
-    def find_substring(self, string, substring):
-        return string.find(substring)
+    def find_sub_string(self, string, sub_string):
+        return string.find(sub_string)
 
     def get_char_at(self, string, index):
         return string[index]
 
-    def to_uppercase(self, string):
+    def to_upper_case(self, string):
         return string.upper()
 
-    def to_lowercase(self, string):
+    def to_lower_case(self, string):
         return string.lower()
 
-    def replace_substring(self, string, old_substring, new_substring):
-        return string.replace(old_substring, new_substring)
+    def replace_sub_string(self, string, old_sub_string, new_sub_string):
+        return string.replace(old_sub_string, new_sub_string)
 
     def split_string(self, string, delimiter=None):
         if delimiter is None:

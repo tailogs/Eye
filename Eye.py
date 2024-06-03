@@ -43,21 +43,24 @@ while (x > 0) {
 '''
 
 factorial = '''
+~ Определяем функцию factorial для вычисления факториала числа n
 fn factorial(n) {
     if (n == 0) {
-        return 1;
+        return 1; ~ Если n равно 0, возвращаем 1 (базовый случай рекурсии)
     } else {
-        return n * factorial(n - 1);
+        return n * factorial(n - 1); ~ Иначе возвращаем произведение n на факториал (n - 1) (рекурсивный случай)
     }
 }
 
-let num = 5;
-let result = factorial(num);
-println("Факториал числа " + num + " равен: " + result); 
+let num = 5; ~ Определяем переменную num и присваиваем ей значение 5
+
+let result = factorial(num); ~ Вызываем функцию factorial с аргументом num и сохраняем результат в переменную result
+
+println("Факториал числа " + num + " равен: " + result); ~ Выводим на экран сообщение о значении факториала числа num
 '''
 
 try:
-    tokens = my_lexer.my_lex(code)
+    tokens = my_lexer.my_lex(factorial)
     parser = MyParser(tokens)
     ast = parser.parse()
 

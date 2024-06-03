@@ -12,32 +12,32 @@ fn add(a, b) {
     return a + b;
 }
 let y = add(x, 20);
-print(y);
-print(s);
-print(b);
+println(y);
+println(s);
+println(b);
 
 if (x > 11) {
-    print("x больше 0");
+    println("x больше 0");
 } else {}
 
 
 if (x < 20) {
-    print("x меньше 20");
+    println("x меньше 20");
 } else {
-    print("x не меньше 20");
+    println("x не меньше 20");
 }
 
 if (x > 5) {
-    print("x больше 5");
+    println("x больше 5");
 } ifel (x > 15) {
-    print("x больше 15");
+    println("x больше 15");
 } else {
-    print("x равен 5 или меньше");
+    println("x равен 5 или меньше");
 }
 
 let x = 10;
 while (x > 0) {
-    print(x);
+    println(x);
     let x = x - 1;
 }
 '''
@@ -53,7 +53,7 @@ fn factorial(n) {
 
 let num = 5;
 let result = factorial(num);
-print("Факториал числа " + num + " равен: " + result); 
+println("Факториал числа " + num + " равен: " + result); 
 '''
 
 try:

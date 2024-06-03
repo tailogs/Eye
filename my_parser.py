@@ -26,6 +26,8 @@ class MyParser:
             return self.return_statement()
         elif token[1] == 'print':
             return self.print_statement()
+        elif token[1] == 'println':  # Обработка println
+            return self.println_statement()
         elif token[1] == 'if':
             return self.if_statement()
         elif token[1] == 'ifel':
@@ -67,6 +69,12 @@ class MyParser:
         expr = self.expr()
         self.expect('SEMICOL')
         return ('print', expr)
+
+    def println_statement(self):  # Метод для обработки println
+        self.expect('KEYWORD')
+        expr = self.expr()
+        self.expect('SEMICOL')
+        return ('println', expr)
 
     def if_statement(self):
         self.expect('KEYWORD')  

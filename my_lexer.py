@@ -1,30 +1,28 @@
-# my_lexer.py
-
 import re
 
-# Определение типов токенов
+# Token specifications
 TOKEN_SPECIFICATION = [
-    ('NUMBER',   r'\d+(\.\d*)?'),     # Числа
-    ('STRING',   r'\"([^\\\n]|(\\.))*?\"'),  # Строки в двойных кавычках
-    ('BOOLEAN',  r'true|false'),      # Логические значения
-    ('IDENT',    r'[A-Za-z_]\w*'),    # Идентификаторы
-    ('OP',       r'==|!=|<=|>=|<|>|//|\|\||&&|[+\-*/%=]'),  # Операторы
-    ('PAREN',    r'[()]'),            # Скобки
-    ('BRACE',    r'[{}]'),            # Фигурные скобки
-    ('COMMA',    r','),               # Запятая
-    ('SEMICOL',  r';'),               # Точка с запятой
-    ('SKIP',     r'[ \t]+'),          # Пропуск пробелов и табуляций
-    ('NEWLINE',  r'\n'),              # Новая строка
-    ('MISMATCH', r'.'),               # Остальные символы
+    ('NUMBER',   r'\d+(\.\d*)?'),     # Numbers
+    ('STRING',   r'\"([^\\\n]|(\\.))*?\"'),  # Strings in double quotes
+    ('BOOLEAN',  r'true|false'),      # Boolean values
+    ('IDENT',    r'[A-Za-z_]\w*'),    # Identifiers
+    ('OP',       r'==|!=|<=|>=|<|>|//|\|\||&&|[+\-*/%=]'),  # Operators
+    ('PAREN',    r'[()]'),            # Parentheses
+    ('BRACE',    r'[{}]'),            # Braces
+    ('COMMA',    r','),               # Comma
+    ('SEMICOL',  r';'),               # Semicolon
+    ('SKIP',     r'[ \t]+'),          # Skip spaces and tabs
+    ('NEWLINE',  r'\n'),              # Newline
+    ('MISMATCH', r'.'),               # Any other character
 ]
 
-# Ключевые слова
-KEYWORDS = {'fn', 'let', 'if', 'else', 'while', 'for', 'return', 'int', 'float', 'bool', 'string', 'print', 'and', 'or', 'not', 'ifel'}
+# Keywords
+KEYWORDS = {'fn', 'let', 'if', 'else', 'while', 'for', 'return', 'int', 'float', 'bool', 'string', 'print', 'println', 'and', 'or', 'not', 'ifel'}
 
-# Регулярное выражение для разбора токенов
+# Regular expression for tokenizing
 token_re = re.compile('|'.join('(?P<%s>%s)' % pair for pair in TOKEN_SPECIFICATION))
 
-# Лексический анализатор
+# Lexical analyzer
 def my_lex(code):
     line_num = 1
     line_start = 0
@@ -44,6 +42,6 @@ def my_lex(code):
         elif kind == 'SKIP':
             continue
         elif kind == 'MISMATCH':
-            raise RuntimeError(f'{value!r} unexpected on line {line_num}')
+            raise RuntimeError(f'Unexpected token: {value} at line {line_num}')
         tokens.append((kind, value, line_num, column))
     return tokens

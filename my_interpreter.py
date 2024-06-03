@@ -1,3 +1,5 @@
+# my_interpreter.py
+
 class MyInterpreter:
     def __init__(self, ast):
         self.ast = ast
@@ -22,13 +24,19 @@ class MyInterpreter:
             elif node[0] == 'return':
                 _, expr = node
                 return self.evaluate(expr, env)
-            elif node[0] in {'+', '-', '*', '/', '%', '//'}:
+            elif node[0] == '+':
                 op, left, right = node
                 left_val = self.evaluate(left, env)
                 right_val = self.evaluate(right, env)
-                if op == '+':
+                if isinstance(left_val, str) or isinstance(right_val, str):
+                    return str(left_val) + str(right_val)
+                else:
                     return left_val + right_val
-                elif op == '-':
+            elif node[0] in {'-', '*', '/', '%', '//'}:
+                op, left, right = node
+                left_val = self.evaluate(left, env)
+                right_val = self.evaluate(right, env)
+                if op == '-':
                     return left_val - right_val
                 elif op == '*':
                     return left_val * right_val
@@ -97,7 +105,10 @@ class MyInterpreter:
                 return self.call_function(fn, arg_vals, env)
             elif node[0] == 'print':
                 _, expr = node
-                print(self.evaluate(expr, env))
+                self.print(self.evaluate(expr, env))
+            elif node[0] == 'println':
+                _, expr = node
+                self.println(self.evaluate(expr, env))
         elif isinstance(node, str):
             return env[node]
         else:
@@ -108,3 +119,11 @@ class MyInterpreter:
         local_env = fn_env.copy()
         local_env.update(zip(params, args))
         return self.evaluate(body, local_env)
+
+    def println(self, *args):
+        output = " ".join(str(arg) for arg in args)
+        print(output)
+
+    def print(self, *args):
+        output = "".join(str(arg) for arg in args)
+        print(output, end="")

@@ -132,6 +132,17 @@ class MyParser:
         self.expect('BRACE')    
         return ('while', condition, body)
 
+    def array_literal(self):
+        self.expect('LBRACKET')
+        elements = []
+        if self.tokens[self.pos][1] != ']':
+            elements.append(self.expr())
+            while self.tokens[self.pos][1] == ',':
+                self.pos += 1
+                elements.append(self.expr())
+        self.expect('RBRACKET')
+        return ('array', elements)
+
     def expr_statement(self):
         expr = self.expr()
         self.expect('SEMICOL')
@@ -206,6 +217,8 @@ class MyParser:
                 return self.call()
             self.pos += 1
             return ('ident', token[1])
+        elif token[0] == 'LBRACKET':
+            return self.array_literal()
         elif token[1] == '(':
             self.pos += 1
             node = self.expr()
@@ -213,9 +226,18 @@ class MyParser:
             return node
         elif token[1] == 'not':
             self.pos += 1
-            return ('not', self.factor())
+            return ('not', self.factor())        
+        elif token[1] == '[':
+            return self.index_expr()
         else:
             raise SyntaxError(f"Unexpected token {token}")
+    
+    def index_expr(self):
+        array_name = self.expect('IDENT')
+        self.expect('LBRACKET')
+        index = self.expr()
+        self.expect('RBRACKET')
+        return ('index', array_name, index)
     
     def call(self):
         ident = self.expect('IDENT')

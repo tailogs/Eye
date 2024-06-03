@@ -11,6 +11,8 @@ TOKEN_SPECIFICATION = [
     ('OP',       r'==|!=|<=|>=|<|>|//|\|\||&&|[+\-*/%=]'),  # Operators
     ('PAREN',    r'[()]'),            # Parentheses
     ('BRACE',    r'[{}]'),            # Braces
+    ('LBRACKET', r'\['),              # Left square bracket for array start
+    ('RBRACKET', r'\]'),              # Right square bracket for array end
     ('COMMA',    r','),               # Comma
     ('SEMICOL',  r';'),               # Semicolon
     ('COMMENT',  r'~.*'),             # Comment starting with ~

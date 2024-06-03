@@ -59,8 +59,13 @@ let result = factorial(num); ~ Вызываем функцию factorial с ар
 println("Факториал числа " + num + " равен: " + result); ~ Выводим на экран сообщение о значении факториала числа num
 '''
 
+array = '''
+let array = [1, 2, 3, 4, 5];
+println(array);
+'''
+
 try:
-    tokens = my_lexer.my_lex(factorial)
+    tokens = my_lexer.my_lex(array)
     parser = MyParser(tokens)
     ast = parser.parse()
 

@@ -16,6 +16,19 @@ class MyInterpreter:
             if node[0] == 'let':
                 _, name, expr = node
                 env[name] = self.evaluate(expr, env)
+            elif node[0] == 'array':
+                return [self.evaluate(elem, env) for elem in node[1]]
+            elif node[0] == 'index':
+                array_name, index_expr = node[1], node[2]
+                array = env[array_name]
+                index = self.evaluate(index_expr, env)
+                return array[index]
+            elif node[0] == 'assign_index':
+                array_name, index_expr, value_expr = node[1], node[2], node[3]
+                array = env[array_name]
+                index = self.evaluate(index_expr, env)
+                value = self.evaluate(value_expr, env)
+                array[index] = value
             elif node[0] == 'fn':
                 _, name, params, body = node
                 env[name] = ('fn', params, body, env)

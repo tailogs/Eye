@@ -25,6 +25,7 @@ class MyInterpreter:
             'to_lower_case': ('builtin', self.to_lower_case),
             'replace_sub_string': ('builtin', self.replace_sub_string),
             'split_string': ('builtin', self.split_string),
+            'read': ('builtin', self.read),
             'delete': ('builtin', self.delete)
         }
 
@@ -260,3 +261,8 @@ class MyInterpreter:
             del self.global_env[var_name]
         else:
             raise NameError(f"Variable '{var_name}' not found")
+
+    def read(self, prompt=None):
+        if prompt:
+            self.print(prompt)
+        return input()  # Always returns a string

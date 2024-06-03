@@ -10,6 +10,10 @@ while (x > 0) {
     println("Привет, мир!");
     let x = x - 1;
 }
+
+let age = read("Введите возраст: ");
+println("Ваш возраст: " + age);
+println("Через год вам будет: " + (to_integer(age) + 1));
 '''
 
 try:

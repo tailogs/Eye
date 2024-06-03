@@ -215,6 +215,8 @@ class MyParser:
             self.pos += 1
             return ('bool', token[1] == 'true')
         elif token[0] == 'IDENT':
+            if token[1] == 'read':
+                return self.read_expr()  # Handle read() function call
             if self.pos + 1 < len(self.tokens) and self.tokens[self.pos + 1][1] == '(':
                 return self.call()
             self.pos += 1
@@ -241,6 +243,17 @@ class MyParser:
             return ('or', self.logic_and(), self.factor())  # Обновление здесь
         else:
             raise SyntaxError(f"Unexpected token {token}")
+
+    def read_expr(self):
+        self.pos += 1  # Пропускаем 'read'
+        self.expect('PAREN')
+        if self.tokens[self.pos][1] == ')':
+            self.expect('PAREN')
+            return ('call', 'read', [])
+        else:
+            prompt = self.expr()
+            self.expect('PAREN')
+            return ('call', 'read', [prompt])
     
     def get_element_expr(self):
         self.pos += 1  # Пропускаем 'get_element'
@@ -284,6 +297,6 @@ class MyParser:
     def expect(self, token_type):
         token = self.tokens[self.pos]
         if token[0] != token_type:
-            raise SyntaxError(f"Expected {token_type} but got {token[0]} ({token[1]}) at line {token[2]}, column {token[3]}")
+            raise SyntaxError(f"Expected {token_type} but got {token[0]} '{token[1]}' at line {token[2] - 1}, column {token[3]}")
         self.pos += 1
         return token[1]

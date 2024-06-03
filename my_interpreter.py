@@ -1,5 +1,3 @@
-# my_interpreter.py
-
 class MyInterpreter:
     def __init__(self, ast):
         self.ast = ast
@@ -24,7 +22,7 @@ class MyInterpreter:
             elif node[0] == 'return':
                 _, expr = node
                 return self.evaluate(expr, env)
-            elif node[0] in {'+', '-', '*', '/'}:
+            elif node[0] in {'+', '-', '*', '/', '%', '//'}:
                 op, left, right = node
                 left_val = self.evaluate(left, env)
                 right_val = self.evaluate(right, env)
@@ -36,6 +34,10 @@ class MyInterpreter:
                     return left_val * right_val
                 elif op == '/':
                     return left_val / right_val
+                elif op == '%':
+                    return left_val % right_val
+                elif op == '//':
+                    return left_val // right_val
             elif node[0] in {'<', '>', '<=', '>=', '==', '!='}:
                 op, left, right = node
                 left_val = self.evaluate(left, env)
@@ -76,6 +78,10 @@ class MyInterpreter:
                         return self.evaluate(branch, env)
                 if else_branch:
                     return self.evaluate(else_branch, env)
+            elif node[0] == 'while':
+                _, condition, body = node
+                while self.evaluate(condition, env):
+                    self.evaluate(body, env)
             elif node[0] == 'num':
                 return node[1]
             elif node[0] == 'string':

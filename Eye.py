@@ -16,19 +16,44 @@ print(y);
 print(s);
 print(b);
 
+if (x > 11) {
+    print("x больше 0");
+} else {}
+
+
 if (x < 20) {
-    print("x is less than 20");
+    print("x меньше 20");
 } else {
-    print("x is not less than 20");
+    print("x не меньше 20");
 }
 
 if (x > 5) {
-    print("x is greater than 5");
+    print("x больше 5");
 } ifel (x > 15) {
-    print("x is greater than 15");
+    print("x больше 15");
 } else {
-    print("x is 5 or less");
+    print("x равен 5 или меньше");
 }
+
+let x = 10;
+while (x > 0) {
+    print(x);
+    let x = x - 1;
+}
+'''
+
+factorial = '''
+fn factorial(n) {
+    if (n == 0) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+let num = 5;
+let result = factorial(num);
+print("Факториал числа " + num + " равен: " + result); 
 '''
 
 try:

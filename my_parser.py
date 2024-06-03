@@ -1,3 +1,7 @@
+# my_parser.py
+
+from my_lexer import KEYWORDS
+
 class MyParser:
     def __init__(self, tokens):
         self.tokens = tokens
@@ -28,6 +32,8 @@ class MyParser:
             return self.ifel_statement()
         elif token[1] == 'else':
             return self.else_statement()
+        elif token[1] == 'while':
+            return self.while_statement()  
         else:
             return self.expr_statement()
 
@@ -63,54 +69,63 @@ class MyParser:
         return ('print', expr)
 
     def if_statement(self):
-        self.expect('KEYWORD')  # 'if'
-        self.expect('PAREN')  # '('
+        self.expect('KEYWORD')  
+        self.expect('PAREN')  
         condition = self.expr()
-        self.expect('PAREN')  # ')'
-        self.expect('BRACE')  # '{'
+        self.expect('PAREN')  
+        self.expect('BRACE')  
         then_branch = self.program()
-        self.expect('BRACE')  # '}'
+        self.expect('BRACE')  
         else_branch = None
         if self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'else':
-            self.expect('KEYWORD')  # 'else'
-            self.expect('BRACE')  # '{'
+            self.expect('KEYWORD')  
+            self.expect('BRACE')  
             else_branch = self.program()
-            self.expect('BRACE')  # '}'
+            self.expect('BRACE')  
         return ('if', condition, then_branch, else_branch)
 
     def ifel_statement(self):
         ifel_branches = []
 
         while self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'ifel':
-            self.expect('KEYWORD')  # 'ifel'
-            self.expect('PAREN')  # '('
+            self.expect('KEYWORD')  
+            self.expect('PAREN')  
             condition = self.expr()
-            self.expect('PAREN')  # ')'
-            self.expect('BRACE')  # '{'
+            self.expect('PAREN')  
+            self.expect('BRACE')  
             then_branch = self.program()
-            self.expect('BRACE')  # '}'
+            self.expect('BRACE')  
             ifel_branches.append((condition, then_branch))
 
         else_branch = None
         if self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'else':
-            self.expect('KEYWORD')  # 'else'
-            self.expect('BRACE')  # '{'
+            self.expect('KEYWORD')  
+            self.expect('BRACE')  
             else_branch = self.program()
-            self.expect('BRACE')  # '}'
+            self.expect('BRACE')  
 
         return ('ifel', ifel_branches, else_branch)
 
     def else_statement(self):
-        self.expect('KEYWORD')  # 'else'
-        self.expect('BRACE')  # '{'
+        self.expect('KEYWORD')  
+        self.expect('BRACE')  
         else_branch = self.program()
-        self.expect('BRACE')  # '}'
+        self.expect('BRACE')  
         
-        # Check if there is an unexpected 'else' after 'else'
         if self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'else':
             raise SyntaxError(f"Unexpected 'else' after 'else' at line {self.tokens[self.pos][2]}, column {self.tokens[self.pos][3]}")
         
         return ('else', else_branch)
+
+    def while_statement(self):
+        self.expect('KEYWORD')  
+        self.expect('PAREN')    
+        condition = self.expr()
+        self.expect('PAREN')    
+        self.expect('BRACE')    
+        body = self.program()
+        self.expect('BRACE')    
+        return ('while', condition, body)
 
     def expr_statement(self):
         expr = self.expr()
@@ -164,12 +179,12 @@ class MyParser:
     
     def term(self):
         node = self.factor()
-        while self.pos < len(self.tokens) and self.tokens[self.pos][1] in ('+', '-'):
+        while self.pos < len(self.tokens) and self.tokens[self.pos][1] in ('+', '-', '*', '/', '%', '//'):
             op = self.tokens[self.pos][1]
             self.pos += 1
             node = (op, node, self.factor())
         return node
-    
+
     def factor(self):
         token = self.tokens[self.pos]
         if token[0] == 'NUMBER':

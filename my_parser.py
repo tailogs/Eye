@@ -219,6 +219,10 @@ class MyParser:
             return ('ident', token[1])
         elif token[0] == 'LBRACKET':
             return self.array_literal()
+        elif token[1] == 'get_element':
+            return self.get_element_expr()
+        elif token[1] == 'set_element':
+            return self.set_element_expr()
         elif token[1] == '(':
             self.pos += 1
             node = self.expr()
@@ -226,11 +230,29 @@ class MyParser:
             return node
         elif token[1] == 'not':
             self.pos += 1
-            return ('not', self.factor())        
-        elif token[1] == '[':
-            return self.index_expr()
+            return ('not', self.factor())
         else:
             raise SyntaxError(f"Unexpected token {token}")
+    
+    def get_element_expr(self):
+        self.pos += 1  # Пропускаем 'get_element'
+        self.expect('PAREN')
+        array = self.expr()
+        self.expect('COMMA')
+        index = self.expr()
+        self.expect('PAREN')
+        return ('get_element', array, index)
+    
+    def set_element_expr(self):
+        self.pos += 1  # Пропускаем 'set_element'
+        self.expect('PAREN')
+        array = self.expr()
+        self.expect('COMMA')
+        index = self.expr()
+        self.expect('COMMA')
+        value = self.expr()
+        self.expect('PAREN')
+        return ('set_element', array, index, value)
     
     def index_expr(self):
         array_name = self.expect('IDENT')

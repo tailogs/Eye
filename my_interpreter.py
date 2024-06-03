@@ -1,7 +1,32 @@
+# my_interpreter.py
+
+import sys
+
 class MyInterpreter:
     def __init__(self, ast):
         self.ast = ast
-        self.global_env = {}
+        self.global_env = {
+            'get_element': ('builtin', self.get_element),
+            'set_element': ('builtin', self.set_element),
+            'remove_element': ('builtin', self.remove_element),
+            'append_element': ('builtin', self.append_element),
+            'get_range': ('builtin', self.get_range),
+            'length': ('builtin', self.length),
+            'to_string': ('builtin', self.to_string),
+            'to_integer': ('builtin', self.to_integer),
+            'to_float': ('builtin', self.to_float),
+            'to_boolean': ('builtin', self.to_boolean),
+            'substring': ('builtin', self.substring),
+            'string_length': ('builtin', self.string_length),
+            'compare_strings': ('builtin', self.compare_strings),
+            'find_substring': ('builtin', self.find_substring),
+            'get_char_at': ('builtin', self.get_char_at),
+            'to_uppercase': ('builtin', self.to_uppercase),
+            'to_lowercase': ('builtin', self.to_lowercase),
+            'replace_substring': ('builtin', self.replace_substring),
+            'split_string': ('builtin', self.split_string),
+            'delete': ('builtin', self.delete)
+        }
 
     def my_interpret(self):
         return self.evaluate(self.ast, self.global_env)
@@ -29,25 +54,23 @@ class MyInterpreter:
                 index = self.evaluate(index_expr, env)
                 value = self.evaluate(value_expr, env)
                 array[index] = value
+                return None
             elif node[0] == 'fn':
                 _, name, params, body = node
                 env[name] = ('fn', params, body, env)
             elif node[0] == 'return':
                 _, expr = node
                 return self.evaluate(expr, env)
-            elif node[0] == '+':
+            elif node[0] in {'+', '-', '*', '/', '%', '//'}:
                 op, left, right = node
                 left_val = self.evaluate(left, env)
                 right_val = self.evaluate(right, env)
-                if isinstance(left_val, str) or isinstance(right_val, str):
-                    return str(left_val) + str(right_val)
-                else:
-                    return left_val + right_val
-            elif node[0] in {'-', '*', '/', '%', '//'}:
-                op, left, right = node
-                left_val = self.evaluate(left, env)
-                right_val = self.evaluate(right, env)
-                if op == '-':
+                if op == '+':
+                    if isinstance(left_val, str) or isinstance(right_val, str):
+                        return str(left_val) + str(right_val)
+                    else:
+                        return left_val + right_val
+                elif op == '-':
                     return left_val - right_val
                 elif op == '*':
                     return left_val * right_val
@@ -128,6 +151,8 @@ class MyInterpreter:
             raise ValueError(f"Unknown node type: {node}")
 
     def call_function(self, fn, args, env):
+        if fn[0] == 'builtin':
+            return fn[1](*args)
         _, params, body, fn_env = fn
         local_env = fn_env.copy()
         local_env.update(zip(params, args))
@@ -140,3 +165,98 @@ class MyInterpreter:
     def print(self, *args):
         output = "".join(str(arg) for arg in args)
         print(output, end="")
+
+    def get_element(self, array, index):
+        return array[index]
+
+    def set_element(self, array, index, value):
+        array[index] = value
+        return None
+
+    def remove_element(self, array, index):
+        return array.pop(index)
+
+    def append_element(self, array, value):
+        array.append(value)
+        return None
+
+    def get_range(self, array, start, end):
+        return array[start:end]
+
+    def length(self, obj):
+        if isinstance(obj, str):
+            return len(obj)
+        elif isinstance(obj, list):
+            return len(obj)
+        elif isinstance(obj, (int, float, bool)):
+            return sys.getsizeof(obj)  # Возвращаем размер в байтах
+        else:
+            raise ValueError(f"Length not supported for type: {type(obj)}")
+
+    def to_string(self, value):
+        return str(value)
+
+    def to_integer(self, value):
+        try:
+            return int(value)
+        except ValueError:
+            raise ValueError(f"Cannot convert {value} to integer")
+
+    def to_float(self, value):
+        try:
+            return float(value)
+        except ValueError:
+            raise ValueError(f"Cannot convert {value} to float")
+
+    def to_boolean(self, value):
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            return value.lower() in {'true', '1', 'yes'}
+        if isinstance(value, (int, float)):
+            return value != 0
+        return bool(value)
+
+    def substring(self, string, start, end=None):
+        if end is None:
+            return string[start:]
+        else:
+            return string[start:end]
+
+    def string_length(self, string):
+        return len(string)
+
+    def compare_strings(self, str1, str2):
+        if str1 == str2:
+            return 0
+        elif str1 < str2:
+            return -1
+        else:
+            return 1
+
+    def find_substring(self, string, substring):
+        return string.find(substring)
+
+    def get_char_at(self, string, index):
+        return string[index]
+
+    def to_uppercase(self, string):
+        return string.upper()
+
+    def to_lowercase(self, string):
+        return string.lower()
+
+    def replace_substring(self, string, old_substring, new_substring):
+        return string.replace(old_substring, new_substring)
+
+    def split_string(self, string, delimiter=None):
+        if delimiter is None:
+            return string.split()
+        else:
+            return string.split(delimiter)
+
+    def delete(self, var_name):
+        if var_name in self.global_env:
+            del self.global_env[var_name]
+        else:
+            raise NameError(f"Variable '{var_name}' not found")

@@ -77,42 +77,39 @@ class MyParser:
         return ('println', expr)
 
     def if_statement(self):
-        self.expect('KEYWORD')  
-        self.expect('PAREN')  
+        self.expect('KEYWORD')
+        self.expect('PAREN')
         condition = self.expr()
-        self.expect('PAREN')  
-        self.expect('BRACE')  
+        self.expect('PAREN')
+        self.expect('BRACE')
         then_branch = self.program()
-        self.expect('BRACE')  
-        else_branch = None
+        self.expect('BRACE')
+        else_branch = None  # Убрали ожидание `else` здесь
         if self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'else':
-            self.expect('KEYWORD')  
-            self.expect('BRACE')  
+            self.expect('KEYWORD')
+            self.expect('BRACE')
             else_branch = self.program()
-            self.expect('BRACE')  
-        return ('if', condition, then_branch, else_branch)
+            self.expect('BRACE')
+        return ('if', condition, then_branch, else_branch if else_branch else [])
 
     def ifel_statement(self):
         ifel_branches = []
-
         while self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'ifel':
-            self.expect('KEYWORD')  
-            self.expect('PAREN')  
+            self.expect('KEYWORD')
+            self.expect('PAREN')
             condition = self.expr()
-            self.expect('PAREN')  
-            self.expect('BRACE')  
+            self.expect('PAREN')
+            self.expect('BRACE')
             then_branch = self.program()
-            self.expect('BRACE')  
+            self.expect('BRACE')
             ifel_branches.append((condition, then_branch))
-
-        else_branch = None
+        else_branch = None  # Убрали ожидание `else` здесь
         if self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'else':
-            self.expect('KEYWORD')  
-            self.expect('BRACE')  
+            self.expect('KEYWORD')
+            self.expect('BRACE')
             else_branch = self.program()
-            self.expect('BRACE')  
-
-        return ('ifel', ifel_branches, else_branch)
+            self.expect('BRACE')
+        return ('ifel', ifel_branches, else_branch if else_branch else [])
 
     def else_statement(self):
         self.expect('KEYWORD')  

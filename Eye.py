@@ -16,9 +16,9 @@ println(y);
 println(s);
 println(b);
 
-if (x > 11) {
+if (x > 0) {
     println("x больше 0");
-} else {}
+} 
 
 
 if (x < 20) {

@@ -1,5 +1,3 @@
-# my_interpreter.py
-
 class MyInterpreter:
     def __init__(self, ast):
         self.ast = ast
@@ -77,7 +75,7 @@ class MyInterpreter:
                 _, condition, then_branch, else_branch = node
                 if self.evaluate(condition, env):
                     return self.evaluate(then_branch, env)
-                else:
+                elif else_branch:
                     return self.evaluate(else_branch, env)
             elif node[0] == 'ifel':
                 _, ifel_branches, else_branch = node
@@ -109,6 +107,8 @@ class MyInterpreter:
             elif node[0] == 'println':
                 _, expr = node
                 self.println(self.evaluate(expr, env))
+            else:
+                raise ValueError(f"Unknown node type: {node}")
         elif isinstance(node, str):
             return env[node]
         else:

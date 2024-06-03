@@ -36,6 +36,46 @@ class MyInterpreter:
                     return left_val * right_val
                 elif op == '/':
                     return left_val / right_val
+            elif node[0] in {'<', '>', '<=', '>=', '==', '!='}:
+                op, left, right = node
+                left_val = self.evaluate(left, env)
+                right_val = self.evaluate(right, env)
+                if op == '<':
+                    return left_val < right_val
+                elif op == '>':
+                    return left_val > right_val
+                elif op == '<=':
+                    return left_val <= right_val
+                elif op == '>=':
+                    return left_val >= right_val
+                elif op == '==':
+                    return left_val == right_val
+                elif op == '!=':
+                    return left_val != right_val
+            elif node[0] in {'and', 'or'}:
+                op, left, right = node
+                left_val = self.evaluate(left, env)
+                right_val = self.evaluate(right, env)
+                if op == 'and':
+                    return left_val and right_val
+                elif op == 'or':
+                    return left_val or right_val
+            elif node[0] == 'not':
+                _, expr = node
+                return not self.evaluate(expr, env)
+            elif node[0] == 'if':
+                _, condition, then_branch, else_branch = node
+                if self.evaluate(condition, env):
+                    return self.evaluate(then_branch, env)
+                else:
+                    return self.evaluate(else_branch, env)
+            elif node[0] == 'ifel':
+                _, ifel_branches, else_branch = node
+                for condition, branch in ifel_branches:
+                    if self.evaluate(condition, env):
+                        return self.evaluate(branch, env)
+                if else_branch:
+                    return self.evaluate(else_branch, env)
             elif node[0] == 'num':
                 return node[1]
             elif node[0] == 'string':

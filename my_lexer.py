@@ -8,7 +8,7 @@ TOKEN_SPECIFICATION = [
     ('STRING',   r'\"([^\\\n]|(\\.))*?\"'),  # Строки в двойных кавычках
     ('BOOLEAN',  r'true|false'),      # Логические значения
     ('IDENT',    r'[A-Za-z_]\w*'),    # Идентификаторы
-    ('OP',       r'[+\-*/=]'),        # Операторы
+    ('OP',       r'==|!=|<=|>=|<|>|\|\||&&|[+\-*/=]'),  # Операторы
     ('PAREN',    r'[()]'),            # Скобки
     ('BRACE',    r'[{}]'),            # Фигурные скобки
     ('COMMA',    r','),               # Запятая
@@ -19,7 +19,7 @@ TOKEN_SPECIFICATION = [
 ]
 
 # Ключевые слова
-KEYWORDS = {'fn', 'let', 'if', 'else', 'while', 'for', 'return', 'int', 'float', 'bool', 'string', 'print'}
+KEYWORDS = {'fn', 'let', 'if', 'else', 'while', 'for', 'return', 'int', 'float', 'bool', 'string', 'print', 'and', 'or', 'not', 'ifel'}
 
 # Регулярное выражение для разбора токенов
 token_re = re.compile('|'.join('(?P<%s>%s)' % pair for pair in TOKEN_SPECIFICATION))

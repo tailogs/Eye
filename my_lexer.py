@@ -9,6 +9,9 @@ TOKEN_SPECIFICATION = [
     ('BOOLEAN',  r'true|false'),      # Boolean values
     ('IDENT',    r'[A-Za-zА-Яа-я_]\w*'),    # Identifiers (добавлены кириллические символы)
     ('OP',       r'==|!=|<=|>=|<|>|//|\|\||&&|[+\-*/%=]'),  # Operators
+    ('NOT',      r'!'),               # Logical NOT
+    ('AND',      r'and'),             # Logical AND
+    ('OR',       r'or'),              # Logical OR
     ('PAREN',    r'[()]'),            # Parentheses
     ('BRACE',    r'[{}]'),            # Braces
     ('LBRACKET', r'\['),              # Left square bracket for array start

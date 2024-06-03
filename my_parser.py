@@ -165,14 +165,16 @@ class MyParser:
     
     def logic_or(self):
         node = self.logic_and()
-        while self.pos < len(self.tokens) and self.tokens[self.pos][1] == '||':
+        while self.pos < len(self.tokens) and (self.tokens[self.pos][1] == '||' or self.tokens[self.pos][0] == 'OR' or self.tokens[self.pos][1] == 'or'):
+            op = self.tokens[self.pos][1]
             self.pos += 1
             node = ('or', node, self.logic_and())
         return node
-    
+
     def logic_and(self):
         node = self.equality()
-        while self.pos < len(self.tokens) and self.tokens[self.pos][1] == '&&':
+        while self.pos < len(self.tokens) and (self.tokens[self.pos][1] == '&&' or self.tokens[self.pos][0] == 'AND' or self.tokens[self.pos][1] == 'and'):
+            op = self.tokens[self.pos][1]
             self.pos += 1
             node = ('and', node, self.equality())
         return node
@@ -228,9 +230,15 @@ class MyParser:
             node = self.expr()
             self.expect('PAREN')
             return node
-        elif token[1] == 'not':
+        elif token[0] == 'NOT' or token[1] == 'not':
             self.pos += 1
             return ('not', self.factor())
+        elif token[0] == 'AND' or token[1] == 'and':
+            self.pos += 1
+            return ('and', self.logic_or(), self.factor())  # Обновление здесь
+        elif token[0] == 'OR' or token[1] == 'or':
+            self.pos += 1
+            return ('or', self.logic_and(), self.factor())  # Обновление здесь
         else:
             raise SyntaxError(f"Unexpected token {token}")
     

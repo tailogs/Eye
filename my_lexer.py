@@ -1,6 +1,7 @@
 # my_lexer.py
 
 import re
+from console.ConsoleColors import ConsoleColors
 
 # Token specifications
 TOKEN_SPECIFICATION = [
@@ -49,6 +50,6 @@ def my_lex(code):
         elif kind in {'SKIP', 'COMMENT'}:
             continue
         elif kind == 'MISMATCH':
-            raise RuntimeError(f'Unexpected token: {value} at line {line_num}')
+            raise RuntimeError(f'{ConsoleColors.Text.RED}Unexpected token: {value} at line {line_num}{ConsoleColors.RESET}')
         tokens.append((kind, value, line_num, column))
     return tokens

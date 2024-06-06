@@ -1,6 +1,7 @@
 # my_interpreter.py
 
 import sys
+from console.ConsoleColors import ConsoleColors
 
 class MyInterpreter:
     def __init__(self, ast):
@@ -145,11 +146,11 @@ class MyInterpreter:
                 _, expr = node
                 self.println(self.evaluate(expr, env))
             else:
-                raise ValueError(f"Unknown node type: {node}")
+                raise ValueError(f"{ConsoleColors.Text.RED}Unknown node type: {node}{ConsoleColors.RESET}")
         elif isinstance(node, str):
             return env[node]
         else:
-            raise ValueError(f"Unknown node type: {node}")
+            raise ValueError(f"{ConsoleColors.Text.RED}Unknown node type: {node}{ConsoleColors.RESET}")
 
     def call_function(self, fn, args, env):
         if fn[0] == 'builtin':
@@ -192,7 +193,7 @@ class MyInterpreter:
         elif isinstance(obj, (int, float, bool)):
             return sys.getsizeof(obj)  # Возвращаем размер в байтах
         else:
-            raise ValueError(f"Length not supported for type: {type(obj)}")
+            raise ValueError(f"{ConsoleColors.Text.RED}Length not supported for type: {type(obj)} {ConsoleColors.RESET}")
 
     def to_string(self, value):
         return str(value)
@@ -201,13 +202,13 @@ class MyInterpreter:
         try:
             return int(value)
         except ValueError:
-            raise ValueError(f"Cannot convert {value} to integer")
+            raise ValueError(f"{ConsoleColors.Text.RED}Cannot convert {value} to integer {ConsoleColors.RESET}")
 
     def to_float(self, value):
         try:
             return float(value)
         except ValueError:
-            raise ValueError(f"Cannot convert {value} to float")
+            raise ValueError(f"{ConsoleColors.Text.RED}Cannot convert {value} to float {ConsoleColors.RESET}")
 
     def to_boolean(self, value):
         if isinstance(value, bool):
@@ -260,7 +261,7 @@ class MyInterpreter:
         if var_name in self.global_env:
             del self.global_env[var_name]
         else:
-            raise NameError(f"Variable '{var_name}' not found")
+            raise NameError(f"{ConsoleColors.Text.RED}Variable '{var_name}' not found {ConsoleColors.RESET}")
 
     def read(self, prompt=None):
         if prompt:

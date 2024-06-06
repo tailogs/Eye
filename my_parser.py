@@ -1,6 +1,7 @@
 # my_parser.py
 
 from my_lexer import KEYWORDS
+from console.ConsoleColors import ConsoleColors
 
 class MyParser:
     def __init__(self, tokens):
@@ -118,7 +119,7 @@ class MyParser:
         self.expect('BRACE')  
         
         if self.pos < len(self.tokens) and self.tokens[self.pos][1] == 'else':
-            raise SyntaxError(f"Unexpected 'else' after 'else' at line {self.tokens[self.pos][2]}, column {self.tokens[self.pos][3]}")
+            raise SyntaxError(f"{ConsoleColors.Text.RED}Unexpected 'else' after 'else' at line {self.tokens[self.pos][2]}, column {self.tokens[self.pos][3]}{ConsoleColors.RESET}")
         
         return ('else', else_branch)
 
@@ -242,7 +243,7 @@ class MyParser:
             self.pos += 1
             return ('or', self.logic_and(), self.factor())  # Обновление здесь
         else:
-            raise SyntaxError(f"Unexpected token {token}")
+            raise SyntaxError(f"{ConsoleColors.Text.RED}Unexpected token {token}{ConsoleColors.RESET}")
 
     def read_expr(self):
         self.pos += 1  # Пропускаем 'read'
@@ -297,6 +298,6 @@ class MyParser:
     def expect(self, token_type):
         token = self.tokens[self.pos]
         if token[0] != token_type:
-            raise SyntaxError(f"Expected {token_type} but got {token[0]} '{token[1]}' at line {token[2] - 1}, column {token[3]}")
+            raise SyntaxError(f"{ConsoleColors.Text.RED}Expected {token_type} but got {token[0]} '{token[1]}' at line {token[2] - 1}, column {token[3]}{ConsoleColors.RESET}")
         self.pos += 1
         return token[1]
